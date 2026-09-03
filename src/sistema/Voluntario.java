@@ -1,7 +1,5 @@
 package sistema;
 
-import java.util.ArrayList;
-
 public class Voluntario {
     // Variáveis
     private String nome;
@@ -16,6 +14,10 @@ public class Voluntario {
     public String getMatricula() { return matricula; }
     public int getQuantidadeAcoes() { return quantidadeAcoes; }
     public int getPontuacaoAcumulada() { return pontuacaoAcumulada; }
+
+    // Setters
+    public void setQuantidadeAcoes(int quantidadeAcoes) { this.quantidadeAcoes = quantidadeAcoes; }
+    public void setPontuacaoAcumulada(int pontuacaoAcumulada) { this.pontuacaoAcumulada = pontuacaoAcumulada; }
 
     // Construtor
     public Voluntario(String nome, String email, String matricula, int quantidadeAcoes, int pontuacaoAcumulada) throws IllegalArgumentException {

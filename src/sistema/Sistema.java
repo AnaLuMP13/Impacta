@@ -2,9 +2,9 @@ package sistema;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+
 // MUDAR NOME???
-public class SistemaVoluntario {
+public class Sistema {
     // Listas
     ArrayList<Voluntario> voluntarios;
     ArrayList<Acao> acoes;
@@ -13,7 +13,7 @@ public class SistemaVoluntario {
     ArrayList<Oficina> oficinas;
 
     // Construtor
-    public SistemaVoluntario() {
+    public Sistema() {
         this.voluntarios = new ArrayList<>();
     }
 
@@ -33,7 +33,7 @@ public class SistemaVoluntario {
             }
         }
 
-        /*PRECISA DE "THIS"??*/voluntarios.add(voluntarioNovo);
+        voluntarios.add(voluntarioNovo);
         return true;
     }
     // PRECISA DO "THROWS"?
@@ -93,17 +93,49 @@ public class SistemaVoluntario {
         if (emailVoluntario.trim().isEmpty() || idAcao <= 0) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
-        Acao acao = new Acao("temporario", "temporario", LocalDateTime.now(), 0);
+
         Voluntario voluntario = new Voluntario("temporario", "temporario", "temporario", 0, 0);
+        for (int i = 0; i < voluntarios.size(); i++) {
+            if (voluntarios.get(i).getEmail().equals(emailVoluntario)) {
+                voluntario = voluntarios.get(i);
+                break;
+            }
+        }
+
+        int pontuacaoAcumulada = voluntario.getPontuacaoAcumulada();
 
         // CERTO?? 2 acao  X acoes
-        for (int i = 0; i < plantios.size(); i++) { if (plantios.get(i).getIdAcao() == idAcao) { acao = plantios.get(i); } }
-        for (int i = 0; i < mutiroes.size(); i++) { if (mutiroes.get(i).getIdAcao() == idAcao) { acao = mutiroes.get(i); } }
-        for (int i = 0; i < oficinas.size(); i++) { if (oficinas.get(i).getIdAcao() == idAcao) { acao = oficinas.get(i); } }
+        for (int i = 0; i < plantios.size(); i++) {
+            if (plantios.get(i).getIdAcao() == idAcao) {
+                Plantio plantio = plantios.get(i);
 
-        for (int i = 0; i < voluntarios.size(); i++) { if (voluntarios.get(i).getEmail().equals(emailVoluntario)) { voluntario = voluntarios.get(i); } }
+                pontuacaoAcumulada += 5 + plantio.getQtdMudas() * 2;
+                plantio.getParticipantes().add(voluntario);
+                break;
+            }
+        }
+        for (int i = 0; i < mutiroes.size(); i++) {
+            if (mutiroes.get(i).getIdAcao() == idAcao) {
+                Mutirao mutirao = mutiroes.get(i);
 
-        acao.getParticipantes().add(voluntario);
+                pontuacaoAcumulada += mutirao.getDuracaoHoras() * 4;
+                mutirao.getParticipantes().add(voluntario);
+                break;
+            }
+        }
+        for (int i = 0; i < oficinas.size(); i++) {
+            if (oficinas.get(i).getIdAcao() == idAcao) {
+                Oficina oficina = oficinas.get(i);
+
+                pontuacaoAcumulada += oficina.getDuracaoHoras() * 3;
+                if (oficina.getKitMaterial()) { pontuacaoAcumulada += 10; }
+                oficina.getParticipantes().add(voluntario);
+                break;
+            }
+        }
+
+        voluntario.setQuantidadeAcoes(voluntario.getQuantidadeAcoes() + 1);
+        voluntario.setPontuacaoAcumulada(pontuacaoAcumulada);
 
         return true;
     }
@@ -111,15 +143,16 @@ public class SistemaVoluntario {
     //!!!!!!!!!!!!!!!!
     String exibirDetalhesAcao(int idAcao) {
         String retorno = "";
-        if (idAcao <= 0) {
-            throw new IllegalArgumentException("Erro: ID inserido inválido.");
-        }
+
+        if (idAcao <= 0) { throw new IllegalArgumentException("Erro: ID inserido inválido."); }
+
         for (int i = 0; i < plantios.size(); i++) {
             Plantio plantio = plantios.get(i);
 
             if (plantio.getIdAcao() == idAcao) {
                 int pontuacaoCalculada = 5 + plantio.getQtdMudas() * 2;
                 retorno = String.format("Título: %s\nDescrição: %s\nData: %s\nPontuação calculada: %d\nLista de inscritos: %s\nQuantidade de mudas: %d.", plantio.getTitulo(), plantio.getDescricao(), plantio.getData(), pontuacaoCalculada, plantio.getParticipantes(), plantio.getQtdMudas());
+                break;
             }
         }
             for (int i = 0; i < mutiroes.size(); i++) {
@@ -128,15 +161,17 @@ public class SistemaVoluntario {
                 if (mutirao.getIdAcao() == idAcao) {
                     int pontuacaoCalculada = mutirao.getDuracaoHoras() * 4;
                     retorno = String.format("Título: %s\nDescrição: %s\nData: %s\nPontuação calculada: %d\nLista de inscritos: %s\nDuração (horas): %d", mutirao.getTitulo(), mutirao.getDescricao(), mutirao.getData(), pontuacaoCalculada, mutirao.getParticipantes(), mutirao.getDuracaoHoras());
+                    break;
                 }
             }
                 for (int i = 0; i < oficinas.size(); i++) {
                     Oficina oficina = oficinas.get(i);
 
                     if (oficina.getIdAcao() == idAcao) {
-                        int pontuacaoCalculada = oficina.getDuracaoHoras() * 3; // CÁLCULO
-                        if (oficina.getKitMaterial()) { pontuacaoCalculada = pontuacaoCalculada + 10; }
+                        int pontuacaoCalculada = oficina.getDuracaoHoras() * 3;
+                        if (oficina.getKitMaterial()) { pontuacaoCalculada += 10; }
                         retorno = String.format("Título: %s\nDescrição: %s\nData: %s\nPontuação calculada: %d\nLista de inscritos: %s\nDuração (horas): %d", oficina.getTitulo(), oficina.getDescricao(), oficina.getData(), pontuacaoCalculada, oficina.getParticipantes(), oficina.getDuracaoHoras());
+                        break;
                     }
                 }//HORAS MESMO? // TRIM MESMO? TÁ CERTO? -> (THROW NEW) ERRO?
         if (retorno.trim().isEmpty()) { retorno = "ID não encontrado."; }
