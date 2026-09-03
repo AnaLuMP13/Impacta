@@ -1,17 +1,20 @@
 package sistema;
 
 import java.time.LocalDateTime;
-
-public abstract class Acao { //ARRAYLIST OU LIST?
+import java.util.ArrayList;
+import java.util.List;
+// TODO ABSTRATO??
+public class Acao {
     // todo checar
     // Contador
     private static int contadorId = 0;
 
-    // Variáveis
+    // Variáveis //ARRAYLIST OU LIST?
     private String titulo;
     private String descricao;
     private LocalDateTime data;
     private int maxParticipantes;
+    private List<Voluntario> participantes;
     private int idAcao;
 
     // Construtor
@@ -24,15 +27,17 @@ public abstract class Acao { //ARRAYLIST OU LIST?
         this.data = data;
         this.maxParticipantes = maxParticipantes;
         this.idAcao = contadorId++;
+        this.participantes = new ArrayList<>();
     }
 
-    // Getters
+    // Getters // DEIXA SÓ OS USADOS?
     public static int getContadorId() { return contadorId; }
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
     public LocalDateTime getData() { return data; }
     public int getMaxParticipantes() { return maxParticipantes; }
     public int getIdAcao() { return idAcao; }
+    public List<Voluntario> getParticipantes() { return participantes; }
 
     // Setter
     public void setIdAcao(int idAcao) { this.idAcao = idAcao; }

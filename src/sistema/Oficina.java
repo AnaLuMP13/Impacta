@@ -17,4 +17,8 @@ public final class Oficina extends Acao {
         this.kitMaterial = kitMaterial;
     }
 
+    // Getters //PRECISA DE "THIS?"
+    public int getDuracaoHoras() { return duracaoHoras; }
+    public boolean getKitMaterial() { return kitMaterial; }
+
 }

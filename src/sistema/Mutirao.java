@@ -15,4 +15,7 @@ public final class Mutirao extends Acao {
         this.duracaoHoras = duracaoHoras;
     }
 
+    // Getter //PRECISA DE "THIS?"
+    public int getDuracaoHoras() { return duracaoHoras; }
+
 }

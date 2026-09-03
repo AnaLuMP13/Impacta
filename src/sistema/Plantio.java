@@ -15,4 +15,7 @@ public final class Plantio extends Acao {
         this.qtdMudas = qtdMudas;
     }
 
+    // Getter
+    public int getQtdMudas() { return this.qtdMudas; }
+
 }
