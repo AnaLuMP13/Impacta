@@ -20,15 +20,15 @@ public class Voluntario {
     public void setPontuacaoAcumulada(int pontuacaoAcumulada) { this.pontuacaoAcumulada = pontuacaoAcumulada; }
 
     // Construtor
-    public Voluntario(String nome, String email, String matricula, int quantidadeAcoes, int pontuacaoAcumulada) throws IllegalArgumentException {
-        if (nome.trim().isEmpty() || email.trim().isEmpty() || matricula.trim().isEmpty() || quantidadeAcoes < 0 || pontuacaoAcumulada < 0) {
+    public Voluntario(String nome, String email, String matricula) throws IllegalArgumentException {
+        if (nome.trim().isEmpty() || email.trim().isEmpty() || matricula.trim().isEmpty()) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
         this.nome = nome;
         this.email = email;
         this.matricula = matricula;
-        this.quantidadeAcoes = quantidadeAcoes;
-        this.pontuacaoAcumulada = pontuacaoAcumulada;
+        this.quantidadeAcoes = 0;
+        this.pontuacaoAcumulada = 0;
     }
 
 }
