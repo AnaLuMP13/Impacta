@@ -2,6 +2,8 @@ package sistema;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 // MUDAR NOME???
 public class Sistema {
@@ -54,10 +56,16 @@ public class Sistema {
     }
         return retorno;
         }
+    //!!!!!!!!!!!!!!!!
+        public String[] listarVoluntarios() {
+        String[] listaOrganizada = voluntarios.stream().sorted(Comparator.comparing(Voluntario::getPontuacaoAcumulada).reversed()).collect(Collectors.toList());
 
-        /*public String[] listarVoluntarios() {
-        Collections.sort(voluntarios, Collections.reverseOrder());
-        }*/
+        if  (listaOrganizada == null) {
+            listaOrganizada[1] = "Não há voluntários inscritos.";
+        }
+
+        return listaOrganizada;
+        }
 
     // todo: AÇÕES
     public int cadastrarPlantio(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int qtdMudas) throws IllegalArgumentException {
