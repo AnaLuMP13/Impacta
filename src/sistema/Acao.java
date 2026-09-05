@@ -28,9 +28,11 @@ public class Acao {
         this.maxParticipantes = maxParticipantes;
         this.idAcao = contadorId++;
         this.participantes = new ArrayList<>();
+
+
     }
 
-    // Getters // DEIXA SÓ OS USADOS?
+    // Getters
     public static int getContadorId() { return contadorId; }
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
@@ -42,4 +44,5 @@ public class Acao {
     // Setter
     public void setIdAcao(int idAcao) { this.idAcao = idAcao; }
 
+    public static void setContadorId(int contadorId) { Acao.contadorId = contadorId; }
 }

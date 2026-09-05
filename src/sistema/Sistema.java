@@ -3,7 +3,7 @@ package sistema;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.stream.Collectors;
+import java.util.List;
 
 // MUDAR NOME???
 public class Sistema {
@@ -44,8 +44,8 @@ public class Sistema {
         voluntarios.add(voluntarioNovo);
         return true;
     }
-    // PRECISA DO "THROWS"?
-    public String exibirVoluntario(String email) throws IllegalArgumentException {
+
+    public String exibirVoluntario(String email) {
         String retorno = "";
 
         for (Voluntario voluntario : voluntarios) {
@@ -57,24 +57,38 @@ public class Sistema {
         return retorno;
         }
     //!!!!!!!!!!!!!!!!
-        public String[] listarVoluntarios() {
-        String[] listaOrganizada = voluntarios.stream().sorted(Comparator.comparing(Voluntario::getPontuacaoAcumulada).reversed()).collect(Collectors.toList());
+        /*public String[] listarVoluntarios() {
+        List.sort(voluntarios),new Comparator<Voluntario>() {
+            public int compare(Voluntario v1, Voluntario v2) {
+                if (v1.getPontuacaoAcumulada() < v2.getPontuacaoAcumulada()) {
+                    return 1;
+                }
+                if (v1.getPontuacaoAcumulada() > v2.getPontuacaoAcumulada()) {
+                    return -1;
+                }
+                if (v1.getPontuacaoAcumulada() == v2.getPontuacaoAcumulada()) {
+                    return v1.getNome().compareToIgnoreCase(v2.getNome());
+                }
+                return v1.getNome().compareToIgnoreCase(v2.getNome());
+            }
+        };
+
+        String[] listaOrganizada = voluntarios.sort();
 
         if  (listaOrganizada == null) {
             listaOrganizada[1] = "Não há voluntários inscritos.";
         }
 
         return listaOrganizada;
-        }
+    }*/
 
     // todo: AÇÕES
     public int cadastrarPlantio(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int qtdMudas) throws IllegalArgumentException {
         if (titulo.trim().isEmpty() || descricao.trim().isEmpty() || data == null || maxParticipantes <= 0 || qtdMudas <= 0) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
-
         Plantio plantioNovo = new Plantio(titulo, descricao, data, maxParticipantes, qtdMudas);
-        //acoes.add(plantioNovo);
+
         plantios.add(plantioNovo);
 
         return plantioNovo.getIdAcao();
@@ -84,9 +98,8 @@ public class Sistema {
         if (titulo.trim().isEmpty() || descricao.trim().isEmpty() || data == null || maxParticipantes <= 0 || duracaoHoras <= 0) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
-
         Mutirao mutiraoNovo = new Mutirao(titulo, descricao, data, maxParticipantes, duracaoHoras);
-        //acoes.add(mutiraoNovo);
+
         mutiroes.add(mutiraoNovo);
 
         return mutiraoNovo.getIdAcao();
@@ -96,9 +109,8 @@ public class Sistema {
         if (titulo.trim().isEmpty() || descricao.trim().isEmpty() || data == null || maxParticipantes <= 0 || duracaoHoras <= 0) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
-
         Oficina oficinaNova = new Oficina(titulo, descricao, data, maxParticipantes, duracaoHoras, kitMaterial);
-        //acoes.add(oficinaNova);
+
         oficinas.add(oficinaNova);
 
         return oficinaNova.getIdAcao();
@@ -106,26 +118,27 @@ public class Sistema {
 // ERROS ESTÃO CERTOS? THROWS? todo CHECAR!
     public boolean inscreverVoluntario(String emailVoluntario, int idAcao) throws IllegalArgumentException {
         if (emailVoluntario.trim().isEmpty() || idAcao <= 0) {
-            throw new IllegalArgumentException("Valor inserido inválido.");
+            throw new IllegalArgumentException("Erro: Valor inserido inválido.");
         }
 
-        Voluntario voluntario = new Voluntario("temporario", "temporario", "temporario");
+        Voluntario voluntario = new Voluntario("Temporário", "Temporário", "Temporário");
         for (int i = 0; i < voluntarios.size(); i++) {
             if (voluntarios.get(i).getEmail().equals(emailVoluntario)) {
                 voluntario = voluntarios.get(i);
                 break;
             }
         }
-
+        if (!voluntario.getNome().equals("Temporário")) {
         int pontuacaoAcumulada = voluntario.getPontuacaoAcumulada();
 
-        // CERTO?? 2 acao  X acoes
         for (int i = 0; i < plantios.size(); i++) {
             if (plantios.get(i).getIdAcao() == idAcao) {
                 Plantio plantio = plantios.get(i);
 
-                pontuacaoAcumulada += 5 + plantio.getQtdMudas() * 2;
-                plantio.getParticipantes().add(voluntario);
+                if (!plantio.getParticipantes().contains(voluntario)) {
+                    pontuacaoAcumulada += 5 + plantio.getQtdMudas() * 2;
+                    plantio.getParticipantes().add(voluntario);
+                } else { return false; }
                 break;
             }
         }
@@ -133,8 +146,10 @@ public class Sistema {
             if (mutiroes.get(i).getIdAcao() == idAcao) {
                 Mutirao mutirao = mutiroes.get(i);
 
+                if (!mutirao.getParticipantes().contains(voluntario)) {
                 pontuacaoAcumulada += mutirao.getDuracaoHoras() * 4;
                 mutirao.getParticipantes().add(voluntario);
+                } else { return false; }
                 break;
             }
         }
@@ -142,9 +157,11 @@ public class Sistema {
             if (oficinas.get(i).getIdAcao() == idAcao) {
                 Oficina oficina = oficinas.get(i);
 
+                if (!oficina.getParticipantes().contains(voluntario)) {
                 pontuacaoAcumulada += oficina.getDuracaoHoras() * 3;
                 if (oficina.getKitMaterial()) { pontuacaoAcumulada += 10; }
                 oficina.getParticipantes().add(voluntario);
+                } else { return false; }
                 break;
             }
         }
@@ -152,15 +169,18 @@ public class Sistema {
         voluntario.setQuantidadeAcoes(voluntario.getQuantidadeAcoes() + 1);
         voluntario.setPontuacaoAcumulada(pontuacaoAcumulada);
 
-        return true;
+        return true; } else {
+            return false;
+        }
     }
 
     //!!!!!!!!!!!!!!!!
     public String exibirDetalhesAcao(int idAcao) {
         String retorno = "";
 
-        if (idAcao <= 0) { throw new IllegalArgumentException("Erro: ID inserido inválido."); }
-
+        if (idAcao <= 0) {
+            throw new IllegalArgumentException("Erro: ID inserido inválido.");
+        }
         for (int i = 0; i < plantios.size(); i++) {
             if (plantios.get(i).getIdAcao() == idAcao) {
                 Plantio plantio = plantios.get(i);
@@ -188,7 +208,8 @@ public class Sistema {
                         retorno = String.format("Título: %s\nDescrição: %s\nData: %s\nPontuação calculada: %d\nLista de inscritos: %s\nDuração (horas): %d", oficina.getTitulo(), oficina.getDescricao(), oficina.getData(), pontuacaoCalculada, oficina.getParticipantes(), oficina.getDuracaoHoras());
                         break;
                     }
-                }//HORAS MESMO? // TRIM MESMO? TÁ CERTO? -> (THROW NEW) ERRO?
+                }
+
         if (retorno.trim().isEmpty()) { retorno = "ID não encontrado."; }
 
         return retorno;
