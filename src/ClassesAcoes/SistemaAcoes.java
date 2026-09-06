@@ -61,7 +61,7 @@ public class SistemaAcoes {
     public String exibirDetalhesAcao(int idAcao) {
         Acoes acao = acoes.get(idAcao);
         if (acao == null) {
-            throw new IllegalArgumentException("Ação não encontrada.");
+            throw new AcaoNaoEncontradaException("Ação não encontrada.");
         }
         return acao.exibirDetalhes();
     }
