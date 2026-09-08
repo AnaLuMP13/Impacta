@@ -66,13 +66,12 @@ public abstract class Acoes {
     }
 
     public String exibirDetalhes() {
-        StringBuilder sb = new StringBuilder(); // cria e modifica strings sem gerar novos objetos
-        sb.append(String.format("ID: %d\nTítulo: %s\nDescrição: %s\nData: %s\nPontuação da Ação: %d\nInscritos:\n",
-                id, titulo, descricao, data.toString(), calcularPontuacao()));
+        String detalhes = String.format("ID: %d\nTítulo: %s\nDescrição: %s\nData: %s\nPontuação da Ação: %d\nInscritos:\n",
+                id, titulo, descricao, data.toString(), calcularPontuacao());
 
         for (Voluntarios voluntario : voluntarios) {
-            sb.append(voluntario.getNome()).append("\n");
+            detalhes += voluntario.getNome() + "\n";
         }
-        return sb.toString();
+        return detalhes;
     }
 }

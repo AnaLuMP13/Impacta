@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -86,7 +88,7 @@ public class SistemaVoluntariosTeste {
         sistemaVoluntarios.cadastrarVoluntario("Alice", "alice@email.com", "22");
         sistemaVoluntarios.cadastrarVoluntario("Jose", "jose@email.com", "31");
 
-        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", "2026-10-10T10:00:00", 10, 10);
+        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 10);
 
         sistemaAcoes.inscreverVoluntario("jose@email.com", idPlantio);
         sistemaAcoes.inscreverVoluntario("alice@email.com", idPlantio);

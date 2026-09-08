@@ -20,26 +20,23 @@ public class SistemaAcoes {
         this.proximoId = 1;
     }
 
-    public int cadastrarPlantio(String titulo, String descricao, String data, int maxParticipantes, int qtdMudas) {
-        LocalDateTime dt = LocalDateTime.parse(data); // transforma a data no tipo LocalDateTime
+    public int cadastrarPlantio(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int qtdMudas) {
         int id = proximoId++;
-        Acoes acao = new PlantioDeMudas(id, titulo, descricao, dt, maxParticipantes, qtdMudas);
+        Acoes acao = new PlantioDeMudas(id, titulo, descricao, data, maxParticipantes, qtdMudas);
         acoes.put(id, acao);
         return id;
     }
 
-    public int cadastrarMutirao(String titulo, String descricao, String data, int maxParticipantes, int duracaoHoras) {
-        LocalDateTime dt = LocalDateTime.parse(data);
+    public int cadastrarMutirao(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int duracaoHoras) {
         int id = proximoId++;
-        Acoes acao = new MutiraoDeReciclagem(id, titulo, descricao, dt, maxParticipantes, duracaoHoras);
+        Acoes acao = new MutiraoDeReciclagem(id, titulo, descricao, data, maxParticipantes, duracaoHoras);
         acoes.put(id, acao);
         return id;
     }
 
-    public int cadastrarOficina(String titulo, String descricao, String data, int maxParticipantes, int duracaoHoras, boolean kitMaterial) {
-        LocalDateTime dt = LocalDateTime.parse(data);
+    public int cadastrarOficina(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int duracaoHoras, boolean kitMaterial) {
         int id = proximoId++;
-        Acoes acao = new OficinaEcologica(id, titulo, descricao, dt, maxParticipantes, duracaoHoras, kitMaterial);
+        Acoes acao = new OficinaEcologica(id, titulo, descricao, data, maxParticipantes, duracaoHoras, kitMaterial);
         acoes.put(id, acao);
         return id;
     }

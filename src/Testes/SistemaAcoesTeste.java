@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,9 +28,9 @@ public class SistemaAcoesTeste {
     @Test
     @DisplayName("Deve calcular a pontuacao da acao e quantidade de acoes")
     public void deveCalcularPontuacaoEInscricaoAcoes() {
-        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", "2026-10-10T10:00:00", 10, 10);
-        int idMutirao = sistemaAcoes.cadastrarMutirao("Mutirão", "Reciclagem", "2026-10-11T10:00:00", 10, 3);
-        int idOficina = sistemaAcoes.cadastrarOficina("Oficina", "Papel", "2026-10-12T10:00:00", 10, 2, true);
+        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 10);
+        int idMutirao = sistemaAcoes.cadastrarMutirao("Mutirão", "Reciclagem", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 3);
+        int idOficina = sistemaAcoes.cadastrarOficina("Oficina", "Cerâmica", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 2, true);
 
         sistemaVoluntarios.cadastrarVoluntario("Rebeca", "rebeca@email.com", "12312");
 
@@ -43,10 +45,10 @@ public class SistemaAcoesTeste {
     @Test
     @DisplayName("Deve testar se o voluntario nao foi encontrado")
     public void deveLancarExcecaoVoluntarioNaoEncontrado() {
-        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", "2026-10-10T10:00:00", 10, 10);
+        int idPlantio = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 10);
 
         assertThrows(VoluntarioNaoEncontradoException.class, () -> {
-            sistemaAcoes.inscreverVoluntario("inexistente@email.com", idPlantio);
+            sistemaAcoes.inscreverVoluntario("naoencontrado@email.com", idPlantio);
         });
     }
 
@@ -56,15 +58,15 @@ public class SistemaAcoesTeste {
         sistemaVoluntarios.cadastrarVoluntario("Renan", "renan@email.com", "98798");
 
         assertThrows(AcaoNaoEncontradaException.class, () -> {
-            sistemaAcoes.inscreverVoluntario("renan@email.com", 9999);
+            sistemaAcoes.inscreverVoluntario("renan@email.com", 99999);
         });
     }
 
     @Test
     @DisplayName("Deve testar a dupla inscricao")
     public void deveLancarExcecaoInscricaoDupla() {
-        int id = sistemaAcoes.cadastrarMutirao("Mutirão", "Praia", "2026-10-10T10:00:00", 5, 2);
-        sistemaVoluntarios.cadastrarVoluntario("Laura", "laura@email.com", "123");
+        int id = sistemaAcoes.cadastrarMutirao("Mutirão", "Reciclagem", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 3);
+        sistemaVoluntarios.cadastrarVoluntario("Laura", "laura@email.com", "12345");
 
         sistemaAcoes.inscreverVoluntario("laura@email.com", id);
 
@@ -76,7 +78,7 @@ public class SistemaAcoesTeste {
     @Test
     @DisplayName("Deve testar a acao lotada")
     public void deveLancarExcecaoAcaoLotada() {
-        int id = sistemaAcoes.cadastrarMutirao("Mutirão Express", "Praia", "2026-10-10T10:00:00", 1, 2);
+        int id = sistemaAcoes.cadastrarMutirao("Mutirão", "Reciclagem", LocalDateTime.of(2026, 9, 9, 10, 10), 1, 3);
 
         sistemaVoluntarios.cadastrarVoluntario("Daniel", "daniel@email.com", "67676");
         sistemaVoluntarios.cadastrarVoluntario("Yane", "yane@email.com", "24680");
@@ -91,14 +93,14 @@ public class SistemaAcoesTeste {
     @Test
     @DisplayName("Deve testar os detatlhes da acao")
     public void deveLancarExibirDetalhesAcao() {
-        int id = sistemaAcoes.cadastrarPlantio("Plantio Urbano", "Mudas nativas", "2026-10-10T10:00:00", 5, 10);
+        int id = sistemaAcoes.cadastrarPlantio("Plantio", "Mudas", LocalDateTime.of(2026, 9, 9, 10, 10), 10, 10);
         sistemaVoluntarios.cadastrarVoluntario("Evelyn", "evelyn@email.com", "36900");
 
         sistemaAcoes.inscreverVoluntario("evelyn@email.com", id);
 
         String detalhes = sistemaAcoes.exibirDetalhesAcao(id);
 
-        assertTrue(detalhes.contains("Plantio Urbano"));
+        assertTrue(detalhes.contains("Plantio"));
         assertTrue(detalhes.contains("Evelyn"));
     }
 }
