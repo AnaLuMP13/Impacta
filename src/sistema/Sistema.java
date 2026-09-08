@@ -2,14 +2,15 @@ package sistema;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-// MUDAR NOME???
+import static java.util.Collections.sort;
+
 public class Sistema {
     // Listas
     private ArrayList<Voluntario> voluntarios;
-    //private ArrayList<Acao> acoes = new ArrayList<>();
     private ArrayList<Plantio> plantios;
     private ArrayList<Mutirao> mutiroes;
     private ArrayList<Oficina> oficinas;
@@ -22,11 +23,10 @@ public class Sistema {
         this.oficinas = new ArrayList<>();
     }
 
-    // Getter
+    // Getters
     public ArrayList<Voluntario> getVoluntarios() {
         return voluntarios;
     }
-    //public ArrayList<Acao> getAcoes() { return acoes; }
     public ArrayList<Plantio> getPlantios() { return plantios; }
     public ArrayList<Mutirao> getMutiroes() { return mutiroes; }
     public ArrayList<Oficina> getOficinas() { return oficinas; }
@@ -57,8 +57,8 @@ public class Sistema {
         return retorno;
         }
     //!!!!!!!!!!!!!!!!
-        /*public String[] listarVoluntarios() {
-        List.sort(voluntarios),new Comparator<Voluntario>() {
+        public String[] listarVoluntarios() {
+        voluntarios.sort(new Comparator<Voluntario>() {
             public int compare(Voluntario v1, Voluntario v2) {
                 if (v1.getPontuacaoAcumulada() < v2.getPontuacaoAcumulada()) {
                     return 1;
@@ -71,15 +71,22 @@ public class Sistema {
                 }
                 return v1.getNome().compareToIgnoreCase(v2.getNome());
             }
-        };
+        });
 
-        String[] listaOrganizada = voluntarios.sort();
+        //String[] listaOrganizada = voluntarios.sort();
 
-        if  (listaOrganizada == null) {
-            listaOrganizada[1] = "Não há voluntários inscritos.";
-        }
+        /*if  (voluntarios == null) {
+            voluntarios.toArray(new String[0]);
+            voluntarios.add("teste", );
+        }*/
 
-        return listaOrganizada;
+        return voluntarios.toArray(new String[0]);
+    }
+
+    /*public String[] listarVoluntarios() {
+        voluntarios.sort(Collections.reverseOrder(Comparator.comparing(Voluntario::getNome)));
+        List.sort()
+
     }*/
 
     // todo: AÇÕES
@@ -115,7 +122,7 @@ public class Sistema {
 
         return oficinaNova.getIdAcao();
     }
-// ERROS ESTÃO CERTOS? THROWS? todo CHECAR!
+
     public boolean inscreverVoluntario(String emailVoluntario, int idAcao) throws IllegalArgumentException {
         if (emailVoluntario.trim().isEmpty() || idAcao <= 0) {
             throw new IllegalArgumentException("Erro: Valor inserido inválido.");
@@ -174,7 +181,6 @@ public class Sistema {
         }
     }
 
-    //!!!!!!!!!!!!!!!!
     public String exibirDetalhesAcao(int idAcao) {
         String retorno = "";
 

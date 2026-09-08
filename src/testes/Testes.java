@@ -38,7 +38,11 @@ public class Testes {
         assertEquals("Email não encontrado.", sistema.exibirVoluntario("errado"));
     }
 
-    // LISTAR VOLUNTÁRIOS
+    @Test
+    @DisplayName("Deve listar o nome dos voluntários")
+    public void deveListarNomeDoVoluntario() {
+
+    }
 
     // todo: AÇÕES
     // Cadastrar plantio
