@@ -33,7 +33,8 @@ public class SistemaVoluntarios {
             throw new EmailDuplicadoException("E-mail já cadastrado no sistema.");
         }
 
-        participantes.put(email, new Voluntarios(nome, email, matricula));
+        Voluntarios voluntario = new Voluntarios(nome, email, matricula);
+        participantes.put(email, voluntario);
         return true;
     }
 
