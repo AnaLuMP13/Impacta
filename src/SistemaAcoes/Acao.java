@@ -1,82 +1,93 @@
 package SistemaAcoes;
 
-import SistemaVoluntario.Voluntario;
+import Excecoes.*;
+import SistemaVoluntario.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// classe mae abstrata
 public abstract class Acao {
+
     private int id;
     private String titulo;
     private String descricao;
     private LocalDateTime data;
     private int maxParticipantes;
-    private List<Voluntario> inscritos = new ArrayList<>();
+    // lista dos alunos voluntarios que estao inscritos nesta acao
+    private List<Voluntario> inscritos;
 
-    // Construtor
-    public Acao(int id, String titulo, String descricao, LocalDateTime data, int maxParticipantes) {
+    // construtor
+    protected Acao(int id, String titulo, String descricao, LocalDateTime data, int maxParticipantes) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
         this.maxParticipantes = maxParticipantes;
+        // inicializa a lista de inscritos vazia
+        this.inscritos = new ArrayList<>();
     }
 
-    // Metodo para todas as classes
+    // polimorfismo
     public abstract int calcularPontuacao();
 
-    public boolean vagaSuficiente() {
-        return inscritos.size() < maxParticipantes;
+    // metodo abstrato para devolver seus dados exclusivos: qtd de mudas, horas, kit etc
+    protected abstract String detalhesEspecificos();
+
+    public void inscrever(Voluntario voluntario) {
+        if (inscritos.contains(voluntario)) {
+            throw new DuplaInscricaoException(voluntario.getEmail());
+        }
+        if (inscritos.size() >= maxParticipantes) {
+            throw new AcaoLotadaException(id);
+        }
+        inscritos.add(voluntario);
     }
 
-    public boolean voluntarioInscrito(String email) {
-        for (Voluntario voluntarioCadastrado : inscritos) {
-            if (voluntarioCadastrado.getEmail().equalsIgnoreCase(email)) {
-                return true;
+    public String exibirDetalhes() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Titulo: ").append(titulo).append("\n");
+        sb.append("Descricao: ").append(descricao).append("\n");
+        sb.append("Data: ").append(data).append("\n");
+        sb.append(detalhesEspecificos()).append("\n");
+        sb.append("Pontuacao: ").append(calcularPontuacao()).append("\n");
+        sb.append("Voluntarios inscritos:");
+
+        // lista todos os alunos inscritos ou informa que nao ha nenhum
+        if (inscritos.isEmpty()) {
+            sb.append(" Nenhum");
+        } else {
+            for (Voluntario v : inscritos) {
+                sb.append("\n- ").append(v.getNome()).append(" (").append(v.getEmail()).append(")");
             }
         }
-        return false;
+
+        return sb.toString();
     }
 
-    // Getters e setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
     public String getDescricao() {
         return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
-    }
-
     public int getMaxParticipantes() {
         return maxParticipantes;
     }
 
-    public void setMaxParticipantes(int maxParticipantes) {
-        this.maxParticipantes = maxParticipantes;
+    // retorna a lista de inscritos para consulta
+    public List<Voluntario> getInscritos() {
+        return inscritos;
     }
 }

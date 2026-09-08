@@ -3,11 +3,12 @@ package SistemaAcoes;
 import java.time.LocalDateTime;
 
 public class OficinaEcologica extends Acao {
+
     private int duracaoHoras;
     private boolean kitMaterial;
 
-    // Construtor
-    public OficinaEcologica(int id, String titulo, String descricao, LocalDateTime data, int maxParticipantes, int duracaoHoras, boolean kitMaterial) {
+    public OficinaEcologica(int id, String titulo, String descricao, LocalDateTime data,
+                            int maxParticipantes, int duracaoHoras, boolean kitMaterial) {
         super(id, titulo, descricao, data, maxParticipantes);
         this.duracaoHoras = duracaoHoras;
         this.kitMaterial = kitMaterial;
@@ -15,11 +16,12 @@ public class OficinaEcologica extends Acao {
 
     @Override
     public int calcularPontuacao() {
-        int pontos = 3 * duracaoHoras;
-        if (kitMaterial == true) {
-            pontos += 10;
-            return pontos;
-        }
-        return pontos;
+        return 3 * duracaoHoras + (kitMaterial ? 10 : 0);
+    }
+
+    @Override
+    protected String detalhesEspecificos() {
+        return "Tipo: Oficina Ecologica\nDuracao (horas): " + duracaoHoras
+                + "\nKit Material: " + (kitMaterial ? "Sim" : "Nao");
     }
 }
