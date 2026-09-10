@@ -1,35 +1,41 @@
 package sistema;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Acao {
-    // Objetos
+public abstract class Acao {
+    // Contador
+    private static int contadorId = 1;
+
+    // Variáveis
     private String titulo;
     private String descricao;
     private LocalDateTime data;
     private int maxParticipantes;
-    private int idAcao; // PRECISA SER SÓ 3, NO TOTAL?
+    private List<Voluntario> participantes;
+    private int idAcao;
 
-    // Construtor // ERRO DO ID TÁ CERTO?
-    public Acao(String titulo, String descricao, LocalDateTime data, int maxParticipantes, int idAcao) throws IllegalArgumentException {
-        if (titulo.trim().isEmpty() || descricao.trim().isEmpty() || data == null || maxParticipantes <= 0 || idAcao < 0 || idAcao > 3) {
+    // Construtor
+    public Acao(String titulo, String descricao, LocalDateTime data, int maxParticipantes) throws IllegalArgumentException {
+        if (titulo.trim().isEmpty() || descricao.trim().isEmpty() || data == null || maxParticipantes <= 0) {
             throw new IllegalArgumentException("Valor inserido inválido.");
         }
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
         this.maxParticipantes = maxParticipantes;
-        this.idAcao = idAcao;
+        this.idAcao = contadorId++;
+        this.participantes = new ArrayList<>();
+
+
     }
 
     // Getters
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
     public LocalDateTime getData() { return data; }
-    public int getMaxParticipantes() { return maxParticipantes; }
     public int getIdAcao() { return idAcao; }
-
-    // Setter
-    public void setIdAcao(int idAcao) { this.idAcao = idAcao; }
+    public List<Voluntario> getParticipantes() { return participantes; }
 
 }
