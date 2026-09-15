@@ -47,7 +47,7 @@ public class Sistema {
 
         for (Voluntario voluntario : voluntarios) {
             if (voluntario.getEmail().equals(email)) {
-                retorno = String.format("Nome: %s\nQuantidade de ações participante: %d\nPontuação acumulada: %d", voluntario.getNome(), voluntario.getQuantidadeAcoes(), voluntario.getPontuacaoAcumulada());
+                retorno = voluntario.toString();
                 break;
             } else { retorno = ("Email não encontrado."); }
     }

@@ -34,7 +34,9 @@ public class Testes {
     public void deveExibirVoluntario() {
         sistema.cadastrarVoluntario("Mateus", "mateussilveira@unifacisa.com", "524694");
 
-        assertEquals("Nome: Mateus\nQuantidade de ações participante: 0\nPontuação acumulada: 0", sistema.exibirVoluntario("mateussilveira@unifacisa.com"));
+        Voluntario voluntarioNovo = sistema.getVoluntarios().getFirst();
+
+        assertEquals(voluntarioNovo.toString(), sistema.exibirVoluntario("mateussilveira@unifacisa.com"));
         assertEquals("Email não encontrado.", sistema.exibirVoluntario("errado"));
     }
 
@@ -45,9 +47,6 @@ public class Testes {
 
         sistema.cadastrarVoluntario("Mateus", "mateusferreira@unifacisa.com", "524694");
         sistema.cadastrarVoluntario("Ana", "anaserafina@unifacisa.com", "475869");
-
-        Voluntario voluntarioNovo1 = sistema.getVoluntarios().getFirst();
-        Voluntario voluntarioNovo2 = sistema.getVoluntarios().get(1);
 
         sistema.cadastrarPlantio("Plantio Novo", "Plantação", HorarioEvento, 1000, 5);
 

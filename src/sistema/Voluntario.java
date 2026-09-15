@@ -18,6 +18,16 @@ public class Voluntario {
     public void setQuantidadeAcoes(int quantidadeAcoes) { this.quantidadeAcoes = quantidadeAcoes; }
     public void setPontuacaoAcumulada(int pontuacaoAcumulada) { this.pontuacaoAcumulada = pontuacaoAcumulada; }
 
+    // toString
+    @Override
+    public String toString() {
+        return "Voluntario{" +
+                "nome='" + nome + '\'' +
+                ", quantidadeAcoes=" + quantidadeAcoes +
+                ", pontuacaoAcumulada=" + pontuacaoAcumulada +
+                '}';
+    }
+
     // Construtor
     public Voluntario(String nome, String email, String matricula) throws IllegalArgumentException {
         if (nome.trim().isEmpty() || email.trim().isEmpty() || matricula.trim().isEmpty()) {
